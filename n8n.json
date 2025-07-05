@@ -1,0 +1,1380 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "40c65fbe-bd0a-45a2-821b-47669d6aa893",
+              "leftValue": "={{ $json.body.wook }}",
+              "rightValue": "=RECEIVE_MESSAGE",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "c33ec00a-28f9-4ba7-ac31-d51516fd7e12",
+              "leftValue": "={{ $json.body.isGroupMsg }}",
+              "rightValue": "=is false",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        360,
+        880
+      ],
+      "id": "9dd4cfef-eb21-4b0b-be8b-cc772c9af479",
+      "name": "Mensagem Recebida de contatos1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').item.json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').item.json.sessionkey }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').item.json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').item.json.body.sender }}"
+            },
+            {
+              "name": "text",
+              "value": "=Olá {{ $('Monitoria Resposta Feirante').item.json.body.name }}, seja bem vindo ao cadastro de produtos automatizado do Feirô!\n\nEscolha uma das opções: \n\n*1.* Cadastro de Produtos\n*2.* Alterar Produtos cadastrados\n*3.* Tirar dúvidas com um atendente"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        300
+      ],
+      "id": "31ca5ffd-1eaa-4700-8737-4fa744ec2480",
+      "name": "Apresenta Menu inicial1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').item.json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').item.json.sessionkey }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').item.json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').item.json.body.sender }}"
+            },
+            {
+              "name": "text",
+              "value": "=ok {{ $('Monitoria Resposta Feirante').item.json.body.name }}, para cadastrar os produtos, responda essa mensagem da seguinte forma:  \n\n- Nome do produto que deseja cadastrar\n- Preço\n- Quantidade\n\nObservação: todas informações na mesma frase, só com virgula separando uma informação da outra!"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        560
+      ],
+      "id": "e6814483-9f85-4b1e-9a16-78cc357514e0",
+      "name": "Apresenta Sub Menu Opção 3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').item.json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').item.json.sessionkey }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').item.json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').item.json.body.sender }}"
+            },
+            {
+              "name": "text",
+              "value": "=ok {{ $('Monitoria Resposta Feirante').item.json.body.name }}, clique abaixo para conversar com o atendente:\nhttps://wa.me/53991196891"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        980
+      ],
+      "id": "4255d6a1-ed20-47df-bb03-fafd240f4567",
+      "name": "Direciona para o atendente "
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9da0ef4e-18fd-40a6-aabf-f1108befd2c9",
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": "Cadastro",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "4"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": "cadastro",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "704ec10f-455e-41c7-a504-72cd5fdd799c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "0"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a558a64a-ab9a-4b88-bcea-7ef88bf1f6b8",
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": "CADASTRO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "5"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "197b777e-3ea2-49bd-a335-f45d7dd806bc",
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": "1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "1"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2805a041-930f-493f-be2b-6fdc69765932",
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": "2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "2"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c7361d4d-7787-4d4a-a5ac-f1a87fa05f36",
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": "3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "3"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0c777a23-ed46-4978-8d59-8d4721d769a3",
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": "registrar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "8"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f3f6fb06-5d25-4f3d-9685-8c0565e3d771",
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": ",.+@.+,",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "9"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6db061f0-80e2-4a97-98b7-714add2d440d",
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": "^\\d+,",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "7"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d73f6847-9f40-4081-894c-15454b8e6377",
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": "^[a-zA-Z]",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "6"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        620,
+        780
+      ],
+      "id": "a5201e01-9a6f-4d22-936e-d02123d01957",
+      "name": "Verifica Opção do menu principal"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://50b3-2804-4b0-1211-2500-c01-25e2-d556-db8c.ngrok-free.app/mercadorias",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.produto_formatado }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1520,
+        1700
+      ],
+      "id": "f6937169-ab40-4d46-b5e4-bffcd4960075",
+      "name": "Salvar produtos Banco de dados"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cf1dc6b5-4a39-48ac-bddc-d6fa6118ffe3",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": "201",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1740,
+        1700
+      ],
+      "id": "fcdced30-4505-48e5-8705-177375726abf",
+      "name": "Verifica se o Produto foi salvo no Banco de Dados"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').item.json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').item.json.sessionkey }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').item.json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').item.json.body.sender }}"
+            },
+            {
+              "name": "text",
+              "value": "=ok {{ $('Monitoria Resposta Feirante').item.json.body.name }}, seu produto foi cadastrado com sucesso!"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1980,
+        1620
+      ],
+      "id": "1e8090a3-936a-4830-826d-f87db2939f03",
+      "name": "Confirmação que foi salvo no Banco de Dados"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').item.json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').item.json.sessionkey }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').item.json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').item.json.body.sender }}"
+            },
+            {
+              "name": "text",
+              "value": "=Não foi possível cadastrar seu produto, verifique o formato dos itens que você quer cadastrar!"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1980,
+        1780
+      ],
+      "id": "b9d0311b-c075-4532-824b-55b44cf5b6fd",
+      "name": "Erro ao salvar no Banco de Dados"
+    },
+    {
+      "parameters": {
+        "url": "https://50b3-2804-4b0-1211-2500-c01-25e2-d556-db8c.ngrok-free.app/feirantes/3/mercadorias",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        780
+      ],
+      "id": "287e0d4c-d39c-46be-b646-09276705a877",
+      "name": "Requisição de Leitura no Banco de Dados"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Este código irá rodar apenas UMA VEZ, com a lista completa de produtos.\nconst produtos = items.map(item => item.json);\n\nlet mensagemFormatada = \"Ok, segue abaixo seus itens cadastrados:\\n\\n\";\n\nif (!produtos || produtos.length === 0) {\n  mensagemFormatada = \"Você ainda não possui nenhum produto cadastrado. Para cadastrar, escolha a opção 1 no menu.\";\n} else {\n  for (const produto of produtos) {\n    // --- INÍCIO DA CORREÇÃO ---\n    // Primeiro, convertemos o texto do preço (ex: \"5.99\") para um número.\n    const precoNumerico = parseFloat(produto.preco);\n\n    // Agora que temos um número, podemos usar .toFixed() para formatá-lo.\n    // Também adicionamos uma verificação (isNaN) para o caso de o preço vir com um formato inválido.\n    const precoFormatado = !isNaN(precoNumerico) ? precoNumerico.toFixed(2).replace('.', ',') : \"N/D\";\n    // --- FIM DA CORREÇÃO ---\n    \n    mensagemFormatada += `- ID: ${produto.id}, Nome: ${produto.nome}, Preço: R$ ${precoFormatado}, Quantidade: ${produto.quantidade.toString()}\\n`;\n  }\n\n  mensagemFormatada += \"\\nPara alterar os produtos cadastrados, responda essa mensagem da seguinte forma:\" \n\n  mensagemFormatada += \"\\n- ID do produto que deseja alterar\"\n  mensagemFormatada += \"\\n- Campo do produto que deseja alterar\"\n  mensagemFormatada += \"\\n- Valor do campo do produto que deseja alterar\"\n  mensagemFormatada += \"\\nObservação: todas informações na mesma frase, só com virgula separando uma informação da outra e caso for trocar o preco o separador decimal será ponto final\"\n}\n\n// Retorna um único item com a mensagem completa e formatada.\nreturn [{\n  json: {\n    mensagem_lista_produtos: mensagemFormatada\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        780
+      ],
+      "id": "5f02274d-906e-46ca-939e-9d5a5ff80516",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').first().json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').first().json.sessionkey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').first().json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').first().json.body.sender }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.mensagem_lista_produtos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1740,
+        780
+      ],
+      "id": "6ea77781-d839-4552-91a0-b64002e9c39d",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Chatbot Feiro",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        880
+      ],
+      "id": "380e4ee7-ff8d-4f48-8190-2c2db98baea3",
+      "name": "Monitoria Resposta Feirante",
+      "webhookId": "dda81c63-9f7f-4acb-b609-4287ec8cb7fc"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ec1d9c56-2584-4783-a5cb-89ffc8d24c74",
+              "name": "endpoint",
+              "value": "https://teste.uzapi.com.br:3333",
+              "type": "string"
+            },
+            {
+              "id": "d07c7e53-8e09-4d91-886b-5354e31ffd6c",
+              "name": "session",
+              "value": "ygor",
+              "type": "string"
+            },
+            {
+              "id": "c16a5e0a-bf65-427d-aa59-82d1b1f257c6",
+              "name": "sessionkey",
+              "value": "ygor",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        880
+      ],
+      "id": "df4fa50c-2d90-4294-8f90-9653159f87a8",
+      "name": "Parâmetros"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').item.json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').item.json.sessionkey }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').item.json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').item.json.body.sender }}"
+            },
+            {
+              "name": "text",
+              "value": "=ok {{ $('Monitoria Resposta Feirante').item.json.body.name }}, seu produto foi alterado com sucesso!"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1960,
+        1280
+      ],
+      "id": "60c5831b-a4bc-45f2-a637-548828967ee3",
+      "name": "Confirmação que foi alterado no Banco de Dados"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').item.json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').item.json.sessionkey }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').item.json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').item.json.body.sender }}"
+            },
+            {
+              "name": "text",
+              "value": "=Não foi possível alterar seu produto, verifique o formato dos itens que você quer cadastrar!"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1960,
+        1440
+      ],
+      "id": "83111fac-e7ca-4e50-9965-4efcb49bffb4",
+      "name": "Erro ao alterar no Banco de Dados"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cf1dc6b5-4a39-48ac-bddc-d6fa6118ffe3",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": "200",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1720,
+        1360
+      ],
+      "id": "99019533-5577-4b4d-803e-d78aac389e99",
+      "name": "Verifica se o Produto foi alterado no Banco de Dados"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "= https://50b3-2804-4b0-1211-2500-c01-25e2-d556-db8c.ngrok-free.app/mercadorias/{{ $json.id_produto_alterar }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').first().json.sessionkey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.dados_da_alteracao }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1520,
+        1360
+      ],
+      "id": "b490d6b0-b496-4882-a28f-6f2c2c3579c6",
+      "name": "Alterar Produtos no Banco de Dados"
+    },
+    {
+      "parameters": {
+        "jsCode": "const mensagem = $json.body?.content;\n\nif (!mensagem) {\n  $item.error = \"Não encontrei o texto da mensagem na entrada.\";\n  return $item;\n}\n\n// Quebra a mensagem pela vírgula\nconst partes = mensagem.split(',');\n\n// Verifica se o formato está correto (3 partes)\nif (partes.length !== 3) {\n  $item.error = \"Formato inválido. Responda com Nome,Email,Senha.\";\n  return $item;\n}\n\n// Pega o número de WhatsApp do remetente, ex: \"5553912345678\"\nlet telefoneFeirante = $json.body?.sender;\n\n// --- INÍCIO DA CORREÇÃO ---\n// A validação da sua API espera um telefone com 10 ou 11 dígitos.\n// O número do WhatsApp vem com o código do país (55), resultando em 12 ou 13 dígitos.\n// Vamos remover o código do país \"55\" se ele estiver presente no início.\nif (telefoneFeirante && telefoneFeirante.startsWith('55') && telefoneFeirante.length > 11) {\n  telefoneFeirante = telefoneFeirante.substring(2); // Pega o número a partir do terceiro caractere\n}\n// --- FIM DA CORREÇÃO ---\n\n// Cria a \"ficha de cadastro\" pronta para a API\nconst feiranteData = {\n  nome: partes[0].trim(),\n  email: partes[1].trim(),\n  senha: partes[2].trim(),\n  telefone: telefoneFeirante, // Agora envia o número limpo\n};\n\n// Retorna um novo item com a ficha pronta\nreturn {\n  json: {\n    ...$json,\n    feirante_a_cadastrar: feiranteData\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        1880
+      ],
+      "id": "88c06f0e-800e-482f-be4b-667266ec3ecb",
+      "name": "Code Registrar"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://5675-2804-4b0-1211-2500-e15a-b62c-b1fe-a481.ngrok-free.app/feirantes",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.feirante_a_cadastrar }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        1880
+      ],
+      "id": "9a5f5e22-4cd1-4335-98e6-ea6a01ad046f",
+      "name": "Cadastrar Feirantes"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cf1dc6b5-4a39-48ac-bddc-d6fa6118ffe3",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": "201",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        800,
+        1880
+      ],
+      "id": "f89f423d-1967-43b3-a1f5-5748fb4320b9",
+      "name": "Verifica se o Feirante foi Cadastrado no Banco de Dados"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').item.json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').item.json.sessionkey }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').item.json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').item.json.body.sender }}"
+            },
+            {
+              "name": "text",
+              "value": "=Não foi possível cadastrar você, verifique o formato das informações!"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        1960
+      ],
+      "id": "911e24e2-bed2-43aa-8ff0-bdf98d6b2272",
+      "name": "Erro ao  cadastrar no Banco de Dados"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').item.json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').item.json.sessionkey }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').item.json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').item.json.body.sender }}"
+            },
+            {
+              "name": "=text",
+              "value": "=ok {{ $json.body.nome }}, você foi cadastrado(a) com sucesso!"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        1800
+      ],
+      "id": "3b4bf11f-aad3-4bfd-a025-f87c03a5d5ea",
+      "name": "Confirmação que foi Cadastrado no Banco de Dados1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parâmetros').first().json.endpoint }}/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "sessionkey",
+              "value": "={{ $('Parâmetros').first().json.sessionkey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parâmetros').first().json.session }}"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Monitoria Resposta Feirante').first().json.body.sender }}"
+            },
+            {
+              "name": "text",
+              "value": "=Olá {{ $('Monitoria Resposta Feirante').first().json.body.name }}! Para se registrar, por favor, envie uma única mensagem com as seguintes informações, separadas por vírgula: Seu Nome Completo, Seu Email e Sua Senha"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        1160
+      ],
+      "id": "1b780421-86a0-4dc6-9783-9f286deba52d",
+      "name": "Sub Menu Registrar Feirante"
+    },
+    {
+      "parameters": {
+        "jsCode": "const mensagem = $json.body?.content;\n\nif (!mensagem) {\n  $item.error = \"Não encontrei o texto da mensagem na entrada.\";\n  return $item;\n}\n\n// Quebra a mensagem pela vírgula\nconst partes = mensagem.split(',');\n\n// Verifica se o formato está correto (3 partes)\nif (partes.length !== 3) {\n  $item.error = \"Formato inválido. Responda com ID,campo,valor.\";\n  return $item;\n}\n\nconst idDoProduto = partes[0].trim();\nconst campoParaAlterar = partes[1].trim().toLowerCase(); // Deixa o nome do campo em minúsculas\nlet valorParaAlterar = partes[2].trim();\n\n// Prepara o objeto da alteração\nconst alteracao = {};\n\n// Se o campo for 'preco' ou 'quantidade', converte o valor para número\nif (campoParaAlterar === 'preco' || campoParaAlterar === 'quantidade') {\n  valorParaAlterar = parseFloat(valorParaAlterar);\n}\n\n// Cria a \"ficha de alteração\" dinamicamente\nalteracao[campoParaAlterar] = valorParaAlterar;\n\n// --- INÍCIO DA CORREÇÃO ---\n// Em vez de modificar o item original, retornamos um novo objeto.\n// Esta é a abordagem mais segura e moderna no n8n.\nreturn {\n  json: {\n    // ...$json copia todos os dados que já existiam na entrada\n    ...$json,\n    // e adicionamos as nossas novas propriedades\n    id_produto_alterar: idDoProduto,\n    dados_da_alteracao: alteracao\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        1360
+      ],
+      "id": "f0c54310-c0b3-43a7-a459-be8d7bf86eb2",
+      "name": "Code Alterar Produto"
+    },
+    {
+      "parameters": {
+        "jsCode": "const mensagem = $json.body?.content;\n\n// Verifica se a mensagem realmente existe e é um texto.\nif (!mensagem || typeof mensagem !== 'string') {\n  // Se os dados estiverem errados, é melhor parar este item com um erro claro.\n  // Retornar o item com uma propriedade de erro é a maneira padrão do n8n.\n  $item.error = \"Erro: Não encontrei o texto da mensagem na entrada. Verifique se o nó anterior está a enviar os dados corretos.\";\n  return $item;\n}\n\n// Quebra o texto pela vírgula para separar as informações\nconst partes = mensagem.split(',');\n\n// Faz uma verificação para garantir que o usuário enviou os 3 dados\nif (partes.length !== 3) {\n  $item.error = \"Formato inválido. A mensagem deve ser 'Nome, Preço, Quantidade'.\";\n  return $item;\n}\n\n// Cria um objeto JSON limpo com os dados, pronto para ser enviado para a sua API.\nconst produto = {\n  nome: partes[0].trim(),\n  preco: parseFloat(partes[1].trim()),\n  quantidade: parseFloat(partes[2].trim()),\n  foto: \"\",\n  // IMPORTANTE: Mude o '1' abaixo para o ID de um feirante que já exista no seu banco.\n  feirante_id: 3\n};\n\n// Em vez de modificar o item original ($item), retornamos um novo objeto.\n// Esta é uma abordagem mais segura e moderna no n8n.\n// Ela garante que a estrutura de saída seja sempre válida.\nreturn {\n  json: {\n    // ...$json copia todos os dados que já existiam na entrada\n    ...$json,\n    // e adicionamos a nossa nova propriedade com os dados do produto\n    produto_formatado: produto\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        1700
+      ],
+      "id": "6ec73a55-94b1-440f-801a-07fb8d8d6843",
+      "name": "Code Cadastrar Produto"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Mensagem Recebida de contatos1": {
+      "main": [
+        [
+          {
+            "node": "Verifica Opção do menu principal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apresenta Sub Menu Opção 3": {
+      "main": [
+        []
+      ]
+    },
+    "Verifica Opção do menu principal": {
+      "main": [
+        [
+          {
+            "node": "Apresenta Menu inicial1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Apresenta Menu inicial1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Apresenta Menu inicial1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Apresenta Sub Menu Opção 3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Requisição de Leitura no Banco de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Direciona para o atendente ",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sub Menu Registrar Feirante",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code Registrar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code Alterar Produto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code Cadastrar Produto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar produtos Banco de dados": {
+      "main": [
+        [
+          {
+            "node": "Verifica se o Produto foi salvo no Banco de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica se o Produto foi salvo no Banco de Dados": {
+      "main": [
+        [
+          {
+            "node": "Confirmação que foi salvo no Banco de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Erro ao salvar no Banco de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Requisição de Leitura no Banco de Dados": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "Monitoria Resposta Feirante": {
+      "main": [
+        [
+          {
+            "node": "Parâmetros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parâmetros": {
+      "main": [
+        [
+          {
+            "node": "Mensagem Recebida de contatos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica se o Produto foi alterado no Banco de Dados": {
+      "main": [
+        [
+          {
+            "node": "Confirmação que foi alterado no Banco de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Erro ao alterar no Banco de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alterar Produtos no Banco de Dados": {
+      "main": [
+        [
+          {
+            "node": "Verifica se o Produto foi alterado no Banco de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Registrar": {
+      "main": [
+        [
+          {
+            "node": "Cadastrar Feirantes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cadastrar Feirantes": {
+      "main": [
+        [
+          {
+            "node": "Verifica se o Feirante foi Cadastrado no Banco de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica se o Feirante foi Cadastrado no Banco de Dados": {
+      "main": [
+        [
+          {
+            "node": "Confirmação que foi Cadastrado no Banco de Dados1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Erro ao  cadastrar no Banco de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Alterar Produto": {
+      "main": [
+        [
+          {
+            "node": "Alterar Produtos no Banco de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Cadastrar Produto": {
+      "main": [
+        [
+          {
+            "node": "Salvar produtos Banco de dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "584df333-6726-4720-9c6c-a829bbd9a8c3",
+  "meta": {
+    "instanceId": "f82289b4e98e0cfc208b76448248829d2a0bcf77b3652df01e377cfe9f2d5c34"
+  },
+  "id": "7WpUDKuO4APq8R4X",
+  "tags": []
+}

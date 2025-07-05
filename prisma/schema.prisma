@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model Feirante {
+  id                Int          @id @default(autoincrement())
+  nome              String       @db.VarChar(60)
+  email             String       @unique @db.VarChar(60)
+  senha             String       @db.VarChar(60)
+  telefone          String       @db.VarChar(60)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt()
+  mercadorias       Mercadoria[]
+  fotos_mercadoria  FotoMercadoria[]
+  // usuario           Usuario      @relation(fields: [usuario_id], references: [id])
+  // usuario_id        String
+  @@map("feirantes")
+}
+// talvez por o email para o cadastro do feirante como opcional, já que o cadastro é feito pelo chat bot e capaz do feirante não email
+model Mercadoria {
+  id                  Int                @id @default(autoincrement())
+  nome                String             @db.VarChar(60)
+  preco               Decimal            @db.Decimal(10, 2)
+  quantidade          Decimal            @db.Decimal(10, 2)
+  categoria           Categoria          @default(FRUTAS)
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt()
+  foto                String?
+  feirante            Feirante          @relation(fields: [feirante_id], references: [id])
+  feirante_id         Int
+  destaque            Boolean            @default(true)
+  fotos               FotoMercadoria[]
+  // usuario             Usuario      @relation(fields: [usuario_id], references: [id])
+  // usuario_id          String
+  pedidos             Pedido[]
+  @@map("mercadorias")
+}
+
+enum Categoria {
+  FRUTAS
+  LEGUMES
+  VERDURAS
+  TEMPEROS
+}
+
+model FotoMercadoria {
+  id           Int        @id @default(autoincrement())
+  descricao    String     @db.VarChar(60)
+  url          String
+  mercadoria   Mercadoria @relation(fields: [mercadoria_id], references: [id], onDelete: Cascade)
+  mercadoria_id Int
+  feirante     Feirante          @relation(fields: [feirante_id], references: [id], onDelete: Cascade)
+  feirante_id  Int
+  @@map("fotos_mercadoria")
+}
+
+model Usuario {
+  id                  String   @db.VarChar(36) @id @default(uuid())
+  nome                String   @db.VarChar(60)
+  email               String   @unique @db.VarChar(60)
+  telefone            String   @db.VarChar(60) @default("")
+  endereco            String   @db.VarChar(60) @default("")
+  senha               String   @db.VarChar(60)
+  nivel               Int      @default(1) // 1: Padrão, 2: Moderador, 3: Administrador
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  codigoRecuperacao   String?  
+  // novaSenha           String?  @db.VarChar(60)
+  // confirmarSenha      String?  @db.VarChar(60)
+  // mercadorias         Mercadoria[]
+  // feirantes           Feirante[]
+  pedidos             Pedido[]
+  @@map("usuarios") 
+}
+
+model Pedido {
+  id             Int                @id @default(autoincrement())
+  quantidade     Decimal            @db.Decimal(10, 2) @default(0.00)
+  status         Status             @default(EM_PREPARACAO)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime?          @updatedAt()
+  mercadoria     Mercadoria         @relation(fields: [mercadoria_id], references: [id], onDelete: Cascade)
+  mercadoria_id  Int
+  usuario        Usuario            @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  usuario_id     String             @db.VarChar(36)
+  @@map("pedidos")
+}
+
+model Mensagem {
+  id          Int        @id @default(autoincrement())
+  conteudo    String     @db.VarChar(255)
+  // remetente   Usuario    @relation(fields: [remetente_id], references: [id], onDelete: Cascade)
+  // remetente_id String     @db.VarChar(36)
+  // destinatario Usuario    @relation(fields: [destinatario_id], references: [id], onDelete: Cascade)
+  // destinatario_id String   @db.VarChar(36)
+  // createdAt   DateTime   @default(now())
+  // updatedAt   DateTime   @updatedAt()
+  @@map("mensagens")
+}
+
+model Endereco {
+  id          Int        @id @default(autoincrement())
+  latitude    Float
+  longitude   Float
+  // rua         String     @db.VarChar(60)
+  // numero      String     @db.VarChar(10)
+  // bairro      String     @db.VarChar(60)
+  // cidade      String     @db.VarChar(60)
+  // estado      String     @db.VarChar(2)
+  // cep         String     @db.VarChar(10)
+  // pais        String     @db.VarChar(60)
+  // complemento String?    @db.VarChar(60)
+  // usuario     Usuario    @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  // usuario_id  String     @unique @db.VarChar(36)
+  // feirante    Feirante? @relation(fields: [feirante_id], references: [id])
+  // feirante_id Int?      @unique
+  // createdAt   DateTime   @default(now())
+  // updatedAt   DateTime   @updatedAt()
+  @@map("enderecos")
+}
+
+enum Status {
+  EM_ANDAMENTO
+  FINALIZADO
+  CANCELADO
+  PENDENTE
+  ENTREGUE
+  EM_PREPARACAO
+  EM_ROTA
+  RETORNANDO
+}
