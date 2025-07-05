@@ -4,9 +4,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx ts-node-dev --respawn index.ts",
-    "build": "npx prisma migrate deploy",
+    "build": "echo 'No build step for backend API'",
     "vercel-build": "npm install --legacy-peer-deps && npm run build",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "migrate": "npx prisma migrate deploy"
   },
   "keywords": [],
   "author": "",
