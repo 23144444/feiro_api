@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx ts-node-dev --respawn index.ts",
+    "build": "npx prisma migrate deploy",
     "vercel-build": "npm install --legacy-peer-deps && npm run build",
     "postinstall": "prisma generate"
   },
